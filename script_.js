@@ -217,6 +217,9 @@ function loop() {
     context.fillText(`a = ${a}`, 150, 50);
     context.fillText(`b = ${b}`, 150, 80);
     context.fillText(`c = ${c}`, 150, 110);
+
+    context.font = '25px serif';
+    context.fillText(`z(x,y) = exp(-(2e-5 * (x - x0) ^ 2 + 5e-5 * (y - y0) ^ 2))`, 350, height - 100);
 }
 
 loop();
