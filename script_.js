@@ -1,10 +1,8 @@
 const inputs = document.getElementsByTagName('input');
 
 function f(x, y) {
-    // return -Math.abs(Math.sin(0.002 * (x + 500)) * Math.sin(0.005 * (y + 500)));
     // return -Math.abs(Math.sin(0.002 * (x - 500)) * Math.sin(0.005 * (y - 500)));
-    return Math.abs(0.000011 * ((x - 500) * (x - 500) + (y - 500) * (y - 500)));
-    // return Math.abs(0.00001 * Math.abs((x - 500) * (y - 500)));
+    return Math.abs(0.000005 * ((x - 500) * (x - 500) + (y - 500) * (y - 500)));
 }
 
 function div(val, by) {
@@ -78,8 +76,8 @@ function loop() {
 
     const scale = 100; // Высота значений функции
 
-    const delxyd = 100;    
-    const delxyk = 10;
+    const delxyd = 50;    
+    const delxyk = 5;
     
     const nr = div(nx, delxyd);
     const nr1 = div(nx, delxyd);
