@@ -74,10 +74,10 @@ function loop() {
     const m3 = -Math.sin(b) * Math.cos(a);
     const n3 = Math.cos(b);
 
-    const scale = 100; // Высота значений функции
+    const scale = 150; // Высота значений функции
 
-    const delxyd = 50;    
-    const delxyk = 5;
+    const delxyd = 60;    
+    const delxyk = 6;
     
     const nr = div(nx, delxyd);
     const nr1 = div(nx, delxyd);
