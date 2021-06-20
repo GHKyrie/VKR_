@@ -1,8 +1,10 @@
 const inputs = document.getElementsByTagName('input');
 
+const x0 = 500;
+const y0 = 500;
+
 function f(x, y) {
-    // return -Math.abs(Math.sin(0.002 * (x - 500)) * Math.sin(0.005 * (y - 500)));
-    return Math.abs(0.000005 * ((x - 500) * (x - 500) + (y - 500) * (y - 500)));
+    return -Math.exp(-(2e-5 * (x - x0) ** 2 + 5e-5 * (y - y0) ** 2));
 }
 
 function div(val, by) {
@@ -34,7 +36,7 @@ function loop() {
     const SIZE = 2010 + 1;
     const nx = 1000;    
 
-    const offsetX = height / 2; // положение на оси У
+    const offsetX = height / 1.3; // положение на оси У
     const offsetY = 600; // положение на оси Х
 
     let minvs = new Array(MSIZE);
@@ -74,10 +76,10 @@ function loop() {
     const m3 = -Math.sin(b) * Math.cos(a);
     const n3 = Math.cos(b);
 
-    const scale = 150; // Высота значений функции
+    const scale = 500; // Высота значений функции
 
-    const delxyd = 60;    
-    const delxyk = 6;
+    const delxyd = 40;    
+    const delxyk = 4;
     
     const nr = div(nx, delxyd);
     const nr1 = div(nx, delxyd);
