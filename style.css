@@ -1,6 +1,29 @@
 * { margin:0; padding:0; }
-
 html, body { height:100%; width:100%; }
+
+.expr{
+    position: fixed;
+    top: 30px;
+    left: 400px;
+    font-size: 24px;
+    display: flex;
+    width: 450px;
+    justify-content: space-between;
+    align-items: center;
+}
+.expr > input {
+    width: 80%;
+    margin: 0;
+}
+.expr > input::placeholder{
+    text-align: center;
+    font-size: 16px;
+    letter-spacing: 7px;
+}
+.expr > input {
+    text-align: center;
+    font-size: 16px;
+}
 
 .data{
     position: fixed;
@@ -20,7 +43,7 @@ html, body { height:100%; width:100%; }
     display: flex;
 }
 
-label {
+.data label {
     margin-right: 15px;
 }
 

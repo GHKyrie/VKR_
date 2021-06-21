@@ -1,7 +1,10 @@
 const inputs = document.getElementsByTagName('input');
+const fExpr = document.getElementsByName('i_expr')[0];
 
 const x0 = 500;
 const y0 = 500;
+
+let node;
 
 function f(x, y) {
     return -Math.exp(-(2e-5 * (x - x0) ** 2 + 5e-5 * (y - y0) ** 2));
@@ -24,7 +27,7 @@ function canvasInit(context, width, height) {
     context.font = '16px serif';
 }
 
-function loop() {
+function loop(node) {
     const context = document.querySelector("canvas").getContext("2d");
     
     const height = document.documentElement.clientHeight; 
@@ -48,13 +51,27 @@ function loop() {
 
     let count = 0;
 
-    for (let i = 0; i <= SIZE; i++) {
-        uv[i] = new Array(SIZE);
-        for (let j = 0; j <= SIZE; j++) {
-            uv[i][j] = f(i, j);
+    console.log(`loop - node - ${node}`);
+
+    if (!node) {
+        for (let i = 0; i <= SIZE; i++) {
+            uv[i] = new Array(SIZE);
+            for (let j = 0; j <= SIZE; j++) {
+                uv[i][j] = f(i, j);
+            }
         }
     }
-    
+    else { // NaN 20k elem
+        console.log('else, expr: ', node);
+        for (let i = 0; i <= SIZE; i++) {
+            uv[i] = new Array(SIZE);
+            for (let j = 0; j <= SIZE; j++) {
+                let scope = {x: i, y: j}
+                uv[i][j] = -node.evaluate(scope);
+            }
+        }   
+    }
+        
     for (let i = 0; i <= nx; i++) {
         minv[i] = 800;
         minvs[i] = 800;
@@ -222,7 +239,43 @@ function loop() {
     context.fillText(`z(x,y) = exp(-(2e-5 * (x - x0) ^ 2 + 5e-5 * (y - y0) ^ 2))`, 350, height - 100);
 }
 
-loop();
+loop(node);
 
-for (let i = 0; i < inputs.length; i++) 
-    inputs[i].addEventListener('change', loop);
+for (let i = 0; i < inputs.length - 1; i++) 
+    inputs[i].addEventListener('change', () => {loop(node);});
+
+/* Parser */
+
+fExpr.addEventListener('change', (e) => {
+    const exp = math.parse(e.target.value);
+    node = exp.compile();
+
+    console.log('--');
+    console.log(`exp = ${exp}`); 
+    console.log(`node = ${node}`);
+
+    loop(node);
+
+    const SIZE = 10;
+    let uv = new Array(SIZE);
+
+    // for (let i = 0; i < 10; i++) {
+    //     for (let j = 0; j < 10; j++) {
+    //         const expr = math.simplify(exp, {x: i - 500, y: j - 500});
+    //         console.log(`expr[${i}, ${j}] = ${expr}`)
+    //     }   
+    // }
+
+    /*
+    for (let i = 0; i <= SIZE; i++) {
+        uv[i] = new Array(SIZE);
+        for (let j = 0; j <= SIZE; j++) {
+            let scope = {x: i, y: j}
+
+            uv[i][j] = node.evaluate(scope);
+            console.warn(uv[i][j]);
+        }
+    }  
+    */
+});
+

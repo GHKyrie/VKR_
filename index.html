@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ВКР</title>
     <link rel="stylesheet" href="style.css">
+    <script src='math.js' type="text/javascript"></script>
 </head>
 <body>
     <div class="data">
@@ -21,6 +22,10 @@
             <label for="c">c</label>
             <input type="range" name="c" value="0.78" min="0" max="1.0" step="0.01" />
         </div>
+    </div>
+    <div class="expr">
+        <label for="i_expr">f(x,y) = </label>
+        <input name="i_expr" type="text" placeholder="Выражение" value="e^(-(0.00002*(x-500)^2+0.00005*(y-500)^2))" />
     </div>
     <canvas></canvas> 
 </body>
