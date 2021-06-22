@@ -9,6 +9,7 @@ const x0 = 500;
 const y0 = 500;
 
 let values = initValues(SIZE);
+let text = 'exp(-(2e-5 * (x - x0) ^ 2 + 5e-5 * (y - y0) ^ 2))';
 
 function initValues(SIZE) {
     let values = new Array(SIZE);
@@ -22,7 +23,7 @@ function initValues(SIZE) {
 
     return values;
 }
-
+//abs(sin(0.002*(x-500))*sin(0.005*(y-500)))
 function f(x, y) {
     return -Math.exp(-(2e-5 * (x - x0) ** 2 + 5e-5 * (y - y0) ** 2));
 }
@@ -44,7 +45,7 @@ function canvasInit(context, width, height) {
     context.font = '16px serif';
 }
 
-function loop(uv) {
+function loop(uv, text) {
     const context = document.querySelector("canvas").getContext("2d");
     
     const height = document.documentElement.clientHeight; 
@@ -227,16 +228,18 @@ function loop(uv) {
     context.fillText(`c = ${c}`, 150, 110);
 
     context.font = '25px serif';
-    context.fillText(`z(x,y) = exp(-(2e-5 * (x - x0) ^ 2 + 5e-5 * (y - y0) ^ 2))`, 350, height - 100);
+    context.fillText(`f(x,y) = ${text}`, 350, height - 100);
 }
 
-loop(values);
+loop(values, text);
 
 for (let i = 0; i < inputs.length - 1; i++) 
-    inputs[i].addEventListener('change', () => {loop(values);});
+    inputs[i].addEventListener('change', () => { loop(values, text); });
 
 fExpr.addEventListener('change', (e) => {
     try {
+        fExpr.classList.remove("error");
+
         const exp = math.parse(e.target.value);
         const node = exp.compile();
 
@@ -250,7 +253,7 @@ fExpr.addEventListener('change', (e) => {
                 values[i][j] = -node.evaluate(scope);
             }
 
-        loop(values);
+        loop(values, exp);
     } catch (e) {
         fExpr.classList.add("error");
     }
