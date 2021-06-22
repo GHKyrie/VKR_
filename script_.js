@@ -236,18 +236,22 @@ for (let i = 0; i < inputs.length - 1; i++)
     inputs[i].addEventListener('change', () => {loop(values);});
 
 fExpr.addEventListener('change', (e) => {
-    const exp = math.parse(e.target.value);
-    const node = exp.compile();
+    try {
+        const exp = math.parse(e.target.value);
+        const node = exp.compile();
 
-    console.log('--');
-    console.log(`exp = ${exp}`); 
-    console.log(`node = ${node}`);
+        console.log('--');
+        console.log(`exp = ${exp}`); 
+        console.log(`node = ${node}`);
 
-    for (let i = 0; i <= SIZE; i++) 
-        for (let j = 0; j <= SIZE; j++) {
-            let scope = {x: i, y: j}
-            values[i][j] = -node.evaluate(scope);
-        }
+        for (let i = 0; i <= SIZE; i++) 
+            for (let j = 0; j <= SIZE; j++) {
+                let scope = {x: i, y: j}
+                values[i][j] = -node.evaluate(scope);
+            }
 
-    loop(values);
+        loop(values);
+    } catch (e) {
+        fExpr.classList.add("error");
+    }
 });
