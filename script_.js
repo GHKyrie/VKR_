@@ -1,10 +1,27 @@
 const inputs = document.getElementsByTagName('input');
 const fExpr = document.getElementsByName('i_expr')[0];
 
+const MSIZE = 3000 + 1;
+const SIZE = 2010 + 1;
+const nx = 1000;   
+
 const x0 = 500;
 const y0 = 500;
 
-let node;
+let values = initValues(SIZE);
+
+function initValues(SIZE) {
+    let values = new Array(SIZE);
+
+    for (let i = 0; i <= SIZE; i++) {
+        values[i] = new Array(SIZE);
+        for (let j = 0; j <= SIZE; j++) {
+            values[i][j] = f(i, j);
+        }
+    }   
+
+    return values;
+}
 
 function f(x, y) {
     return -Math.exp(-(2e-5 * (x - x0) ** 2 + 5e-5 * (y - y0) ** 2));
@@ -27,7 +44,7 @@ function canvasInit(context, width, height) {
     context.font = '16px serif';
 }
 
-function loop(node) {
+function loop(uv) {
     const context = document.querySelector("canvas").getContext("2d");
     
     const height = document.documentElement.clientHeight; 
@@ -35,42 +52,16 @@ function loop(node) {
 
     canvasInit(context, width, height);
 
-    const MSIZE = 3000 + 1;
-    const SIZE = 2010 + 1;
-    const nx = 1000;    
-
     const offsetX = height / 1.3; // положение на оси У
     const offsetY = 600; // положение на оси Х
 
     let minvs = new Array(MSIZE);
     let minv = new Array(MSIZE);
-    let uv = new Array(SIZE);
     
     let hhx, hhy, x, y, xx, yy, xxc1, yyc1, xxc2, yyc2;
     let fa, fb;
 
     let count = 0;
-
-    console.log(`loop - node - ${node}`);
-
-    if (!node) {
-        for (let i = 0; i <= SIZE; i++) {
-            uv[i] = new Array(SIZE);
-            for (let j = 0; j <= SIZE; j++) {
-                uv[i][j] = f(i, j);
-            }
-        }
-    }
-    else { // NaN 20k elem
-        console.log('else, expr: ', node);
-        for (let i = 0; i <= SIZE; i++) {
-            uv[i] = new Array(SIZE);
-            for (let j = 0; j <= SIZE; j++) {
-                let scope = {x: i, y: j}
-                uv[i][j] = -node.evaluate(scope);
-            }
-        }   
-    }
         
     for (let i = 0; i <= nx; i++) {
         minv[i] = 800;
@@ -239,43 +230,24 @@ function loop(node) {
     context.fillText(`z(x,y) = exp(-(2e-5 * (x - x0) ^ 2 + 5e-5 * (y - y0) ^ 2))`, 350, height - 100);
 }
 
-loop(node);
+loop(values);
 
 for (let i = 0; i < inputs.length - 1; i++) 
-    inputs[i].addEventListener('change', () => {loop(node);});
-
-/* Parser */
+    inputs[i].addEventListener('change', () => {loop(values);});
 
 fExpr.addEventListener('change', (e) => {
     const exp = math.parse(e.target.value);
-    node = exp.compile();
+    const node = exp.compile();
 
     console.log('--');
     console.log(`exp = ${exp}`); 
     console.log(`node = ${node}`);
 
-    loop(node);
-
-    const SIZE = 10;
-    let uv = new Array(SIZE);
-
-    // for (let i = 0; i < 10; i++) {
-    //     for (let j = 0; j < 10; j++) {
-    //         const expr = math.simplify(exp, {x: i - 500, y: j - 500});
-    //         console.log(`expr[${i}, ${j}] = ${expr}`)
-    //     }   
-    // }
-
-    /*
-    for (let i = 0; i <= SIZE; i++) {
-        uv[i] = new Array(SIZE);
+    for (let i = 0; i <= SIZE; i++) 
         for (let j = 0; j <= SIZE; j++) {
             let scope = {x: i, y: j}
-
-            uv[i][j] = node.evaluate(scope);
-            console.warn(uv[i][j]);
+            values[i][j] = -node.evaluate(scope);
         }
-    }  
-    */
-});
 
+    loop(values);
+});
